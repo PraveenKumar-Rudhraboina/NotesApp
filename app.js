@@ -1,3 +1,5 @@
-const fs = require('fs') 
-// fs.writeFileSync('notes.txt', 'Bum chik Bum Bum!!')
-fs.appendFileSync('notes.txt', 'Fuck itttttt!!!!!!')
+const name1 = require('./utils.js') 
+console.log(name1(1,2))
+
+const name2 = require('./notes.js')
+console.log(name2())
