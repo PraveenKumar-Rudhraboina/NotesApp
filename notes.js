@@ -1,34 +1,31 @@
 const fs = require('fs')
 const chalk = require('chalk')
-const getNotes = function(){
-    return "Your Notes...."
-}
+const getNotes = () => {"Your Notes...."}
 
-const addNote = function(title, body){
+const addNote = (title, body) => {
     const notes = loadNotes()
-    const duplicateNotes = notes.filter(function(note){
-        return note.title === title
-    })
+    //arrow function short hand syntax
+    const duplicateNotes = notes.filter((note) =>  note.title === title)
+    const duplicateNote = notes.find((note) => note.title === title)
 
-    if (duplicateNotes.length === 0){
+    if (!duplicateNote){
         notes.push({
             title: title,
             body: body
         })
         saveNotes(notes)
-        console.log('New Note Added!!!!')
+        console.log(chalk.green.inverse('New Note Added!!!!'))
     } else {
-        console.log('Note title already taken!!!!')
+        console.log(chalk.red.inverse('Note title already taken!!!!'))
     }
 
     
 }
 
-const removeNote = function(title){
+const removeNote = (title) => {
     const notes = loadNotes()
-    const updatedNotes = notes.filter(function(note){
-        return note.title !== title
-    })
+    // arrow function
+    const updatedNotes = notes.filter((note) => note.title !== title)
     if (updatedNotes.length < notes.length){
         console.log(chalk.green.inverse('Note Removed!!!!'))
         saveNotes(updatedNotes)
@@ -37,13 +34,34 @@ const removeNote = function(title){
     }
 }
 
-const saveNotes = function(notes){
+const listNotes = () =>{
+    const notes = loadNotes()
+    console.log(chalk.blue.inverse('Your Notes!!!!!'))
+    notes.forEach((note) => { 
+        console.log(note.title)
+    });
+}
+
+const readNotes = (title) => {
+    const notes = loadNotes()
+    console.log(chalk.yellow.inverse("Reading Notes!!"))
+    const findTitle = notes.find((note)=> note.title === title)
+    
+    if (findTitle){
+            console.log(chalk.red.italic.inverse.strikethrough(findTitle.title))
+            console.log(findTitle.body)
+        // console.log(findTitle)
+    } else{
+        console.log(chalk.red.inverse("Error!!!!"))
+    }
+}
+const saveNotes = (notes) => {
     const dataJson = JSON.stringify(notes)
     fs.writeFileSync('notes.json', dataJson)
 
 }
-
-const loadNotes = function(){
+// debugger
+const loadNotes = () => {
     try{
         const dataBuffer = fs.readFileSync('notes.json')
         const dataJson = dataBuffer.toString()
@@ -54,7 +72,13 @@ const loadNotes = function(){
     
 }
 module.exports = {
-    getNotes: getNotes.apply,
+    getNotes: getNotes,
     addNote: addNote,
-    removeNote: removeNote
+    removeNote: removeNote,
+    listNotes: listNotes,
+    readNotes: readNotes
 } 
+
+// debugger use this to stop the code execute after a particular line for debugging 
+// use this command for inspection of node inspect app.js add --title="courses" --body="dsa"
+// chrome://inspect/#devices open this in chrome to do inspection or debugging in chrome
